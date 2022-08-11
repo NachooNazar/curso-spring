@@ -6,22 +6,19 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class Main {
 
     public static void main(String[] args) {
+
+        //Example 1
+        //1- How we usually create an object
+        CalculatorService calculator = new CalculatorService();
+
+        //2- How we do it with spring, (spring gives it to us)
         ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
-
         CalculatorService service = (CalculatorService) context.getBean("calculatorService");
-        CalculatorService service2 = (CalculatorService) context.getBean("calculatorService");
-        CalculatorService service3 = (CalculatorService) context.getBean("calculatorService");
-
         String txt = service.heyWorld();
-
         System.out.println(txt);
 
-        String txt2 = service2.heyWorld();
-
-        System.out.println(txt2);
-
-        String txt3 = service3.heyWorld();
-
-        System.out.println(txt3);
+        //Example 2
+        GestorFacturas gestor1 = (GestorFacturas) context.getBean("gestorFacturas");
+        gestor1.sayHi();
     }
 }
