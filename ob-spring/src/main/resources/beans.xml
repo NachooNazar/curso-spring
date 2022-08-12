@@ -4,9 +4,12 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         https://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="calculatorService" class="com.example.CalculatorService">
+    <bean id="calculatorService" class="com.example.CalculatorService" scope="singleton">
     </bean>
 
+    <!--
+    wefwefwef
+    -->
     <bean id="gestorFacturas" class="com.example.GestorFacturas">
         <constructor-arg name="calculator" ref="calculatorService"/>
         <constructor-arg name="name" value="Facturas"/>

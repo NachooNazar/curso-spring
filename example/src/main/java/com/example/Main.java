@@ -10,7 +10,7 @@ public class Main {
 
         //Example 1
         //1- How we usually create an object
-        CalculatorService calculator = new CalculatorService();
+        //CalculatorService calculator = new CalculatorService();
 
         //Concept 1: How to get beans of spring
         //2- How we do it with spring, (spring gives it to us)
