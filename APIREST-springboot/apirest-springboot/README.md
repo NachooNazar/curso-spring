@@ -1,8 +1,10 @@
 ## SPRING BOOT
 
 Project springboot with starters:
+For data persistence:
 * H2
 * Spring Data JPA
+For 
 * Spring Web
 * Spring Boot Dev Tools
 

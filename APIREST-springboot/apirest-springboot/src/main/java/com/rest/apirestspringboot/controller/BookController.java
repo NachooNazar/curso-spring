@@ -2,6 +2,8 @@ package com.rest.apirestspringboot.controller;
 
 import com.rest.apirestspringboot.entities.Book;
 import com.rest.apirestspringboot.repository.BookRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,26 +13,30 @@ import java.util.Optional;
 @RestController
 public class BookController {
 
+    private final Logger log = LoggerFactory.getLogger(BookController.class);
     private BookRepository bookRepository;
+
     //CRUD ABOUT BOOK ENTITY
-    public BookController(BookRepository bookRepository){
+    public BookController(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
+
     //GET ALL
     @GetMapping("/api/books")
-    public List<Book> findAll(){
+    public List<Book> findAll() {
         return bookRepository.findAll();
     }
 
     /**
-    * Request
-    * Response
-    * @param id
-    * @return book
-     * */
+     * Request
+     * Response
+     *
+     * @param id
+     * @return book
+     */
     // GET BY ID
     @GetMapping("/api/book/{id}")
-    public ResponseEntity<Book> findById(@PathVariable Long id){
+    public ResponseEntity<Book> findById(@PathVariable Long id) {
 
         Optional<Book> bookopt = bookRepository.findById(id);
         /*
@@ -50,13 +56,70 @@ public class BookController {
     //CREATE
 
     @PostMapping("/api/book")
-    public Book createBook(@RequestBody Book newBook){
-        return bookRepository.save(newBook);
+    public ResponseEntity<Book> createBook(@RequestBody Book newBook) {
+        if (newBook.getId() != null) {
+            log.warn("Book already exists: " + newBook.getId() + " Post Book Method");
+            System.out.println("Book already exists: " + newBook.getId() + " Post Book Method");
+            return ResponseEntity.badRequest().build();
+        }
+        Book res = bookRepository.save(newBook);
+        return ResponseEntity.ok(res);
     }
-    //UPDATE
-    @PutMapping("/api/book/{id}")
-    public Book updateBook(@RequestBody Book newBook, @PathVariable Long id){
-        bookRepository.flush();
+
+    /**
+     * Update book db
+     *
+     * @param book id
+     * @return Book
+     */
+    @PutMapping("/api/book")
+    public ResponseEntity<Book> updateBook(@RequestBody Book newBook) {
+
+        if (newBook.getId() == null) {
+            log.warn("Trying to update an empty book");
+            return ResponseEntity.badRequest().build();
+        }
+
+        if (!bookRepository.existsById(newBook.getId())) {
+            log.warn("Trying to update a non existent book");
+            return ResponseEntity.notFound().build();
+        }
+
+        Book res = bookRepository.save(newBook);
+        return ResponseEntity.ok(res);
     }
     //DELETE
+
+    @DeleteMapping("/api/book/{id}")
+    public ResponseEntity<Book> deleteBook(@PathVariable Long id) {
+
+        if (!bookRepository.existsById(id)) {
+            log.warn("Trying to delete a non existent book");
+            return ResponseEntity.notFound().build();
+        }
+
+        try {
+            bookRepository.deleteById(id);
+
+        } catch (Exception e) {
+            log.error("Error deleting book ", e);
+        }
+        return ResponseEntity.noContent().build();
+    }
+    @DeleteMapping("/api/book")
+    public ResponseEntity<Book> deleteAllBooks(){
+
+        if(bookRepository.count() == 0){
+            log.warn("No books to delete");
+            return ResponseEntity.badRequest().build();
+        }
+
+        try{
+            bookRepository.deleteAll();
+
+        }catch(Exception e){
+            log.error("Error deleting book ", e);
+        }
+        return ResponseEntity.noContent().build();
+    }
 }
