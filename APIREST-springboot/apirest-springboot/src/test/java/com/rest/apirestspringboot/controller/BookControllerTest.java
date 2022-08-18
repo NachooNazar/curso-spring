@@ -58,8 +58,6 @@ class BookControllerTest {
         ResponseEntity<Book> res = testRestTemplate.getForEntity("/api/book/1", Book.class);
         assertEquals(HttpStatus.NOT_FOUND, res.getStatusCode());
 
-        List<Book> list = List.of(Objects.requireNonNull(res.getBody()));
-        System.out.println(list.size());
     }
 
     @Test

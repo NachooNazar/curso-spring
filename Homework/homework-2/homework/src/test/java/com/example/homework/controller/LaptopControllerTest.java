@@ -39,7 +39,7 @@ class LaptopControllerTest {
     @Test
     void getById() {
         ResponseEntity<Laptop> res = testRestTemplate.getForEntity("/api/laptops/1",Laptop.class);
-        assertEquals(HttpStatus.NOT_FOUND,res.getStatusCode());
+        assertEquals(HttpStatus.UNAUTHORIZED,res.getStatusCode());
     }
 
     @Test
@@ -60,7 +60,7 @@ class LaptopControllerTest {
 
         ResponseEntity<Laptop> res = testRestTemplate.exchange("/api/laptops/1", HttpMethod.PUT,request, Laptop.class);
 
-        assertEquals(HttpStatus.NOT_FOUND, res.getStatusCode());
+        assertEquals(HttpStatus.UNAUTHORIZED, res.getStatusCode());
     }
 
     @Test
@@ -96,7 +96,6 @@ class LaptopControllerTest {
         HttpEntity<String> request = new HttpEntity<>(json, headers);
 
         ResponseEntity<Laptop> res = testRestTemplate.exchange("/api/laptop", HttpMethod.POST,request,Laptop.class);
-        assertEquals(HttpStatus.OK, res.getStatusCode());
-        assertEquals("nashex2",res.getBody().getName());
+        assertEquals(HttpStatus.UNAUTHORIZED, res.getStatusCode());
     }
 }

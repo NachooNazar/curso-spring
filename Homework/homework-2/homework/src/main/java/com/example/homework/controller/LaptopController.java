@@ -78,7 +78,7 @@ public class LaptopController {
             return ResponseEntity.badRequest().build();
         }
     }
-    @DeleteMapping("/api/laptops")
+    @DeleteMapping("/api/laptops/delete")
     public ResponseEntity<String> deleteAll(){
         try{
             if(repository.findAll().size() == 0){
